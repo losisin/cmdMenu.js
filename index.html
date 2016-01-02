@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Command line menu</title>
+	<link rel="stylesheet" type="text/css" href="cmdMenu.css">
+</head>
+<body>
+	<nav class="main-nav" id="main-nav">
+        <label for="menuList" id="label-name">#!bin/bash</label>
+        <input aria-labelledby="label-name" class="aa" id="menuList" name="menuList" type="text" />
+	</nav>
+	<article class="page-wrap">
+		<header class="main-header">
+			<a href="#main-nav" class="open-menu" onclick="document.getElementById('menuList').focus();">
+			guest@cmdMenu:<span aria-hidden="true">&nbsp;</span>
+			</a>
+			<a href="#" class="close-menu">
+			guest@cmdMenu
+			</a>
+			<h1>Command line menu</h1>
+		</header>
+		<section id="home">
+			<h2>Home</h2>
+		</section>
+		<section id="about">
+			<h2>About Us</h2>
+		</section>
+		<section id="protfolio">
+			<h2>Portfolio</h2>
+		</section>
+		<section id="venue">
+			<h2>Venue</h2>
+		</section>
+		<section id="add-section">
+			<label for="demo" id="section-name">Section ID:</label>
+			<input aria-labelledby="section-name" id="demo" name="demo" type="text" onkeydown="if(event.keyCode === 13) document.getElementById('submit').click()" />
+			<input id="submit" type="button" onclick="addSec();" value="Add section"/>
+		</section>
+		<section id="contact">
+			<h2>Contact</h2>
+		</section>
+	</article>
+	<footer></footer>
+	<script type="text/javascript">
+		// document.getElementById('menuList').focus();
+	</script>
+    <script type="text/javascript">
+	    function addSec() {
+	    	var art = document.querySelector('article');
+	    	var inputVal = document.getElementById('demo').value;
+	    	if(inputVal.length > 0) {
+	    		var sec = document.createElement('section');
+	    		sec.id = inputVal;
+	    		sec.innerHTML = '<h2>' + sec.id + '</h2>';
+		        art.appendChild(sec);
+	    	} else {
+	    		return false
+	    	}
+	    }
+	</script>
+	<script type="text/javascript" src="cmdMenu.js"></script>
+	<script type="text/javascript">
+		cmdMenu.init('.aa','section');
+		 // for demo only
+	</script>
+</body>
+</html>
