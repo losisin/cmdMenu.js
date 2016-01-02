@@ -1,0 +1,139 @@
+/* cssPanelMenu by Chris Coyier http://codepen.io/chriscoyier/pen/umEgv */
+
+* {
+    box-sizing: border-box;
+}
+html, body {
+    min-height: 100%;
+}
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Lucida Console", Monaco, monospace;
+    font-size: 16px;
+}
+a {
+    text-decoration: none;
+}
+section {
+    margin-top: 50px;
+    padding-top: 100px;
+    text-align: center;
+}
+.hidden {
+    display: none;
+    visibility: hidden;
+}
+.main-header {
+    background: yellow;
+    padding: 5px;
+    text-align: center;
+    color: black;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    transition: all 0.3s ease;
+}
+.main-header a {
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: yellow;
+    padding: 10px 20px;
+    background-color: black;
+}
+.page-wrap {
+    float: right;
+    width: 100%;
+    transition: width 0.3s ease;
+}
+.main-nav {
+    position: fixed;
+    top: 0;
+    width: 0;
+    height: 100%;
+    background: #2a2a2a;
+    overflow-y: auto;
+    transition: width 0.3s ease;
+}
+.main-nav p{
+    color:#fff;  
+}
+.main-nav span{
+    color:yellow;  
+}
+.main-nav a {
+    display: block;
+    border-bottom: 1px solid #111;
+    color: white;
+    padding: 15px 10px;
+    text-transform: capitalize;
+}
+.main-nav a:hover, .main-nav a:focus {
+    background-color: yellow;
+    color: black;
+}
+.main-nav:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 34px;
+}
+.content {
+    padding: 100px 20px 20px 20px;
+}
+.close-menu {
+    display: none;
+}
+#main-nav:target {
+    width: 20%;
+}
+#main-nav:target + .page-wrap { 
+    width: 80%;
+}
+#main-nav:target + .page-wrap .open-menu {
+    display: none;
+}
+#main-nav:target + .page-wrap .close-menu {
+    display: block;
+}
+#main-nav:target + .page-wrap .main-header {
+    width: 80%;
+    left: 20%;
+}
+label#label-name {
+    color: #666;
+    font-size: 25px;
+    font-style: italic;
+    padding: 5px;
+    display: block;
+    font-weight: bold;
+}
+input#menuList {
+    width: 100%;
+    font-size: 16px;
+    background-color: black;
+    outline: 0;
+    border: 0;
+    padding: 10px 5px;
+    color: yellow;
+}
+.open-menu span {
+    color: yellow;
+    background-color:yellow;
+    animation: blink 1s steps(5, start) infinite;
+    -webkit-animation: blink 1s steps(5, start) infinite;
+    background-color: yellow;
+}
+@-webkit-keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}
