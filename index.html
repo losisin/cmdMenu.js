@@ -1,22 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8">
 	<title>Command line menu</title>
-	<link rel="stylesheet" type="text/css" href="cmdMenu.css">
+	<link rel="stylesheet" type="text/css" href="/cmd-menu/cmdMenu.css">
 </head>
 <body>
 	<nav class="main-nav" id="main-nav">
         <label for="menuList" id="label-name">#!bin/bash</label>
-        <input aria-labelledby="label-name" class="aa" id="menuList" name="menuList" type="text" />
+        <input aria-labelledby="label-name" class="ii" id="menuList" name="menuList" type="text" placeholder="start typing here" />
 	</nav>
 	<article class="page-wrap">
 		<header class="main-header">
-			<a href="#main-nav" class="open-menu" onclick="document.getElementById('menuList').focus();">
-			guest@cmdMenu:<span aria-hidden="true">&nbsp;</span>
-			</a>
-			<a href="#" class="close-menu">
-			guest@cmdMenu
-			</a>
+			<button id="open-menu">guest@cmdMenu:<span aria-hidden="true">&nbsp;</span></button>
+			<button id="close-menu">guest@cmdMenu</button>
 			<h1>Command line menu</h1>
 		</header>
 		<section id="home">
@@ -25,7 +22,7 @@
 		<section id="about">
 			<h2>About Us</h2>
 		</section>
-		<section id="protfolio">
+		<section id="portfolio">
 			<h2>Portfolio</h2>
 		</section>
 		<section id="venue">
@@ -33,35 +30,19 @@
 		</section>
 		<section id="add-section">
 			<label for="demo" id="section-name">Section ID:</label>
-			<input aria-labelledby="section-name" id="demo" name="demo" type="text" onkeydown="if(event.keyCode === 13) document.getElementById('submit').click()" />
-			<input id="submit" type="button" onclick="addSec();" value="Add section"/>
+			<input aria-labelledby="section-name" id="demo" name="demo" type="text" />
+			<input id="add" class="submit" type="button" value="Add section"/>
 		</section>
 		<section id="contact">
 			<h2>Contact</h2>
 		</section>
 	</article>
 	<footer></footer>
+	<script type="text/javascript" src="/cmd-menu/main.js"></script>
+	<script type="text/javascript" src="/cmd-menu/cmdMenu.js"></script>
+	<script type="text/javascript" src="/cmd-menu/countryCodes.js"></script>
 	<script type="text/javascript">
-		// document.getElementById('menuList').focus();
-	</script>
-    <script type="text/javascript">
-	    function addSec() {
-	    	var art = document.querySelector('article');
-	    	var inputVal = document.getElementById('demo').value;
-	    	if(inputVal.length > 0) {
-	    		var sec = document.createElement('section');
-	    		sec.id = inputVal;
-	    		sec.innerHTML = '<h2>' + sec.id + '</h2>';
-		        art.appendChild(sec);
-	    	} else {
-	    		return false
-	    	}
-	    }
-	</script>
-	<script type="text/javascript" src="cmdMenu.js"></script>
-	<script type="text/javascript">
-		cmdMenu.init('.aa','section');
-		 // for demo only
+		cmdMenu.init('.ii','section');
 	</script>
 </body>
 </html>
