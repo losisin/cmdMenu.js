@@ -34,13 +34,18 @@ section {
     left: 0;
     transition: all 0.3s ease;
 }
-.main-header a {
+.main-header button {
     position: absolute;
     left: 0;
     top: 0;
     color: yellow;
     padding: 10px 20px;
     background-color: black;
+    border: 0;
+    outline: none;
+    font-size: 16px;
+    font-family: monospace;
+    cursor: pointer;
 }
 .page-wrap {
     float: right;
@@ -84,22 +89,25 @@ section {
 .content {
     padding: 100px 20px 20px 20px;
 }
-.close-menu {
-    display: none;
-}
-#main-nav:target {
-    width: 20%;
-}
-#main-nav:target + .page-wrap { 
-    width: 80%;
-}
-#main-nav:target + .page-wrap .open-menu {
-    display: none;
-}
-#main-nav:target + .page-wrap .close-menu {
+#open-menu {
     display: block;
 }
-#main-nav:target + .page-wrap .main-header {
+#close-menu {
+    display: none;
+}
+.main-nav.show {
+    width: 20%;
+}
+.main-nav.show + .page-wrap { 
+    width: 80%;
+}
+.main-nav.show + .page-wrap #open-menu {
+    display: none;
+}
+.main-nav.show + .page-wrap #close-menu {
+    display: block;
+}
+.main-nav.show + .page-wrap .main-header {
     width: 80%;
     left: 20%;
 }
@@ -119,8 +127,10 @@ input#menuList {
     border: 0;
     padding: 10px 5px;
     color: yellow;
+    -webkit-border-radius: 0;
+    border-radius: 0;
 }
-.open-menu span {
+#open-menu span {
     color: yellow;
     background-color:yellow;
     animation: blink 1s steps(5, start) infinite;
