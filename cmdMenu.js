@@ -25,7 +25,6 @@ var cmdMenu = (function(){
 			if ((getJson.readyState === 4) && (getJson.status === 200)) {
 				var testIp = JSON.parse(getJson.responseText);
 				if(localStorage.length <= 1 || testIp.ip != localStorage.getItem('ip')) {
-					// console.log(testIp.ip);
 					var getInfo = new XMLHttpRequest();
 					getInfo.onreadystatechange = function () {
 						if((getInfo.readyState === 4) && (getInfo.status === 200)) {
