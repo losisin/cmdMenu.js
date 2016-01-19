@@ -93,6 +93,7 @@ var cmdMenu = (function(){
 				for (var i = 0; i < xmlDoc.length; i++) {
 					var loc = xmlDoc[i].childNodes[0].nodeValue;
 					var link = loc.split('/').filter(function(e){ return e === 0 || e}).slice(2).join('/').toString();
+					// console.log(links);
 					links.push(link);
 				}
 			} else {
@@ -104,7 +105,7 @@ var cmdMenu = (function(){
 	var evtKey = function (e){
 		var values = JSON.parse(localStorage.getItem('cmds')) || [];
 		// var i = 0;
-		var command = input.value.trim().toLowerCase();
+		var command = input.value.trim();
 		switch (e.keyCode) {
 			case 13 :
 				if (command.length > 0) {
@@ -164,10 +165,12 @@ cmdMenu.cmds({
 				for (var i = 0; i < val.length; i++) {
 					var a = document.createElement('a');
 					a.href = '#' + val[i].id;
-					if (!val[i].getElementsByTagName('h1, h2, h3, h4, h5, h6').length) {
+					if (!val[i].querySelectorAll('h1, h2, h3, h4, h5, h6').length) {
+						// console.log('if');
 						a.innerHTML = val[i].id.replace('-', ' ');
 					} else {
-						a.innerHTML = val[i].getElementsByTagName('h1, h2, h3, h4, h5, h6')[0].innerText;
+						a.innerHTML = val[i].querySelectorAll('h1, h2, h3, h4, h5, h6')[0].innerText;
+						// console.log('else');
 					}
 					document.querySelector('.results').appendChild(a);
 				}
@@ -192,6 +195,36 @@ cmdMenu.cmds({
 						document.querySelector('.results').appendChild(a);
 					}				
 				}
+			} else if (ls[0] === '-a' || ls[0] === '--all') {
+				document.querySelector('.results').innerHTML = '' + '<h3 class="label">Current page:</h3>';
+					for (var i = 0; i < val.length; i++) {
+						var a = document.createElement('a');
+						a.href = '#' + val[i].id;
+						if (!val[i].querySelectorAll('h1, h2, h3, h4, h5, h6').length) {
+							// console.log('if');
+							a.innerHTML = val[i].id.replace('-', ' ');
+						} else {
+							a.innerHTML = val[i].querySelectorAll('h1, h2, h3, h4, h5, h6')[0].innerText;
+							// console.log('else');
+						}
+						document.querySelector('.results').appendChild(a);
+					}
+				document.querySelector('.results').innerHTML += '<h3 class="label">Entire website:</h3>'
+					for (var i = 0; i < links.length; i++) {
+						for (var i = 0; i < links.length; i++) {
+							var a = document.createElement('a');
+							var loc = links[i];
+							var val = loc.split('/').filter(function(e){ return e !== '' }).slice(-1).toString();
+							var text = val.replace(/-|_|\+|%20/gi, " ").replace(/(.*)\.(.*?)$/, "$1");
+							a.href = (window.location.protocol + '//' + window.location.hostname + '/' + loc);
+							if (val === '') {
+								a.innerHTML = "Home";
+							} else {
+								a.innerHTML = text;
+							}
+							document.querySelector('.results').appendChild(a);
+						}				
+					}
 			} else if (ls[0] === '-h' || ls[0] === '--help') {
 				document.querySelector('.results').innerHTML = '' + 'list all available locations to navigate to<br />Usage:<br />ls [option] [target]<br />Options:<br />[] // prints available locations on current page<br />[-e] or [--external] // prints available pages on the website<br />[-h] [--help] // prints help manual';
 			} else {
