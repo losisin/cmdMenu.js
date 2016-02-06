@@ -27,6 +27,23 @@ var cmdMenu = (function(){
         localStorage.setItem('update', new Date().toUTCString());
     };
 
+    var getPages = function() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("HEAD", "/cmd-menu/pages.json", true);
+        xhr.send(null);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    var query = localStorage.getItem('pages');
+                    var time = xhr.getResponseHeader("Last-Modified");
+                    if (time > update || query === null) {
+                        setIndex();
+                    }
+                }
+            }
+        }
+    };
+
     var setIndex = function () {
         index = new XMLHttpRequest();
         index.open("GET", "/cmd-menu/pages.json", true);
@@ -46,23 +63,6 @@ var cmdMenu = (function(){
         }
     };
 
-    var getPages = function() {
-        var query = localStorage.getItem('pages');
-        var xhr = new XMLHttpRequest();
-        xhr.open("HEAD", "/cmd-menu/pages.json", true);
-        xhr.send(null);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    time = xhr.getResponseHeader("Last-Modified");
-                    if (time > update || query == null) {
-                        setIndex();
-                    }
-                }
-            }
-        }
-    };
-
     var location = function () {
         if(!sessionStorage.getItem('session')) {
             var getInfo = new XMLHttpRequest();
@@ -72,14 +72,19 @@ var cmdMenu = (function(){
             getInfo.onreadystatechange = function () {
                 if((getInfo.readyState === 4) && (getInfo.status === 200)) {
                     var usrInfo = JSON.parse(getInfo.responseText);
-                    for (var c in countryCode) {
-                        if (countryCode.hasOwnProperty(c)) {
-                            c = usrInfo.country;
-                            localStorage.setItem('country', countryCode[c]);
+                    // var countryCode;
+                    if(typeof countryCode === 'object') {
+                        for (var c in countryCode) {
+                            if (countryCode.hasOwnProperty(c)) {
+                                c = usrInfo.country;
+                                localStorage.setItem('country', countryCode[c]);
+                            }
+                            else {
+                                localStorage.setItem('country', usrInfo.country);
+                            }
                         }
-                        else {
-                            localStorage.setItem('country', usrInfo.country);
-                        }
+                    } else {
+                        localStorage.setItem('country', usrInfo.country);
                     }
                     localStorage.setItem('ip', usrInfo.ip);
                     localStorage.setItem('hostname', usrInfo.hostname);
@@ -158,12 +163,12 @@ var cmdMenu = (function(){
         }
     };
 
-    var hightlight = function () {
+    var highlight = function () {
         var url = window.location.search.replace('?q=','');
         var text = decodeURIComponent(url).split("_").join(" ");
         var el = document.querySelectorAll(inElem);
         var regex = new RegExp(text,"gi");
-        var replace = '<span class="hightlight">' + text + '</span>';
+        var replace = '<span class="highlight">' + text + '</span>';
         if (url.length) {
             for (var i = 0, l = el.length; i <l; i++) {
                 el[i].innerHTML = el[i].innerHTML.replace(regex, replace);
@@ -179,17 +184,14 @@ var cmdMenu = (function(){
             events();
             getSections();
             getPages();
+            highlight();
             location();
-            hightlight();
         },
         cmds: function (cmd) {
             cmdFunctions = cmd;
         },
         country : function(code) {
             countryCode = code;
-        },
-        siteSearch: function(query) {
-            search = query;
         }
     }
 })();
