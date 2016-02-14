@@ -383,18 +383,19 @@ cmdMenu.cmds({
                         if(obj[key].toLowerCase().indexOf(query) >= 0) {
                             ids.push(parseInt(obj["id"]));
                             break;
+                        } else {
+                            document.querySelector('.results').innerHTML = '' + 'No results matching ' + '"' + find.slice(1).join(" ") + '"';
                         }
                     }
                 }
                 for (var k = 0, l = ids.length; k < l; k++) {
+                    document.querySelector('.results').innerHTML = '';
                     var q = ids[k];
                     var a = document.createElement('a');
                     a.innerHTML = links[q-1].title;
                     a.href = links[q-1].url + "?q=" + query.split(" ").join("_");
                     document.querySelector('.results').appendChild(a);
                 }
-            } else {
-                document.querySelector('.results').innerHTML = '' + 'No results matching ' + '"' + find.slice(1).join(" ") + '"';
             }
         }
     }
