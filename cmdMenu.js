@@ -5,6 +5,7 @@ var cmdMenu = (function(){
     var inElem = null;
     var sections = null;
     var cmdFunctions = null;
+    var pages = null;
     var events = function () {
         input = document.querySelector(intField);
         input.addEventListener('keydown', evtKey, false);
@@ -29,7 +30,7 @@ var cmdMenu = (function(){
 
     var getPages = function() {
         var xhr = new XMLHttpRequest();
-        xhr.open("HEAD", "/cmd-menu/pages.json", true);
+        xhr.open("HEAD", pages, true);
         xhr.send(null);
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
@@ -46,7 +47,7 @@ var cmdMenu = (function(){
 
     var setIndex = function () {
         index = new XMLHttpRequest();
-        index.open("GET", "/cmd-menu/pages.json", true);
+        index.open("GET", pages, true);
         index.send(null);
         index.onreadystatechange = function() {
             if (index.readyState === 4) {
@@ -72,7 +73,6 @@ var cmdMenu = (function(){
             getInfo.onreadystatechange = function () {
                 if((getInfo.readyState === 4) && (getInfo.status === 200)) {
                     var usrInfo = JSON.parse(getInfo.responseText);
-                    // var countryCode;
                     if(typeof countryCode === 'object') {
                         for (var c in countryCode) {
                             if (countryCode.hasOwnProperty(c)) {
@@ -177,9 +177,10 @@ var cmdMenu = (function(){
     };
 
     return {
-        init: function(ii, section){
-            intField = ii;
+        init: function(element, section, map){
+            intField = element;
             inElem = section;
+            pages = map || "/pages.json";
             results();
             events();
             getSections();
@@ -251,7 +252,7 @@ cmdMenu.cmds({
                     document.querySelector('.results').appendChild(a);
                 }   
             } else if (ls[0] === '-h' || ls[0] === '--help') {
-                document.querySelector('.results').innerHTML = '' + 'list all available locations to navigate to<br />Usage:<br />ls [option] [target]<br />Options:<br />[] // prints available locations on current page<br />[-e] or [--external] // prints available pages on the website<br />[-h] [--help] // prints help manual';
+                document.querySelector('.results').innerHTML = '' + 'list all available locations to navigate to<br />Usage:<br />ls [option] [target]<br />Options:<br />[] // prints available locations on current page<br />[-e] or [--external] // prints available pages on the website<br />[-h], [--help] // prints help manual';
             } else {
                 document.querySelector('.results').innerHTML = '' + 'ls ' + ls.join(' ') + ': command not found';
             }
@@ -262,20 +263,36 @@ cmdMenu.cmds({
             document.querySelector('.results').innerHTML = '' + 'Missing argument for navigation.';
         } else {
             var url = [];
+            var vals = [];
             for (var i = 0, j = links.length; i < j; i++) {
                 url.push(links[i].url);
             }
-            if (cd[0] === '..' || cd[0] === '-') {
-                window.history.go(-1);
-                document.getElementById('close-menu').click();
-            } else if (cd[0] === '/' || cd[0] === '~') {
-                window.location.href = (window.location.protocol + '//' + window.location.hostname);
-            } else if (cd[0] === val[cd[0]].id) {
-                window.location.href = '#' + cd[0];
-            } else if (cd[0] === url[url.indexOf(cd[0])]) {
-                window.location.href = (window.location.protocol + '//' + window.location.hostname + cd[0]);
-            } else {
-                document.querySelector('.results').innerHTML = '' + 'cd ' + cd.join(' ') + ': No such file or directory';
+            for (var v= 0, z = val.length; v < z; v++) {
+                vals.push(val[v].id);
+            }
+            switch(cd[0]) {
+                case '..':
+                case '-':   
+                    window.history.go(-1);
+                    break;
+                case '/':
+                case '~': 
+                    window.location.href = (window.location.protocol + '//' + window.location.hostname);
+                    break;
+                case url[url.indexOf(cd[0])]: 
+                    window.location.href = (window.location.protocol + '//' + window.location.hostname + cd[0]);
+                    break;
+                case vals[vals.indexOf(cd[0])]:
+                    window.location.href = '#' + cd[0];
+                    document.getElementById('close-menu').click();
+                    document.querySelector('.results').innerHTML = '';
+                    break;
+                    case '-h':
+                    case '--help':
+                        document.querySelector('.results').innerHTML = '' + 'Navigate on current website<br />Usage:<br />cd [target]<br />Options:<br />[] // prints available locations on current page<br />[-e] or [--external] // prints available pages on the website<br />[-h], [--help] // prints help manual';
+                        break;
+                default:
+                    document.querySelector('.results').innerHTML = '' + 'cd ' + cd.join(' ') + ': No such file or directory';
             }
         }
     },
@@ -343,7 +360,7 @@ cmdMenu.cmds({
             if(find[0] === '.') {
                 var query = find.slice(1).join(" ");
                 var text = document.body.innerText || document.body.textContent;
-                if(text.indexOf(query) === -1 || text.indexOf(query) === -1) {
+                if(text.indexOf(query) === -1) {
                     document.querySelector('.results').innerHTML = '' + 'No results matching ' + '"' + find.slice(1).join(" ") + '"';
                 } else {
                     window.location.href = window.location.pathname + '?q=' + query.split(" ").join("_");
