@@ -216,45 +216,52 @@ cmdMenu.cmds({
                 document.querySelector('.results').innerHTML = '' + "No elements to navigate on this page. Try with '-h' flag for more options.";
             }
         } else {
-            if (ls[0] === '-e' || ls[0] === '--external') {
-                document.querySelector('.results').innerHTML = '';
-                for (var i = 0, j = links.length; i < j; i++) {
-                    var a = document.createElement('a');
-                    a.href = (window.location.protocol + '//' + window.location.hostname + links[i].url);
-                    if (links[i].url === '/' || links[i].url === '/home' || links[i].url === window.location.hostname) {
-                        a.innerHTML = "Homepage";
-                    } else {
-                        a.innerHTML = links[i].title;
+            switch(ls[0]) {
+                case '-e':
+                case '--external':
+                    document.querySelector('.results').innerHTML = '';
+                    for (var i = 0, j = links.length; i < j; i++) {
+                        var a = document.createElement('a');
+                        a.href = (window.location.protocol + '//' + window.location.hostname + links[i].url);
+                        if (links[i].url === '/' || links[i].url === '/home' || links[i].url === window.location.hostname) {
+                            a.innerHTML = "Homepage";
+                        } else {
+                            a.innerHTML = links[i].title;
+                        }
+                        document.querySelector('.results').appendChild(a);
                     }
-                    document.querySelector('.results').appendChild(a);
-                }               
-            } else if (ls[0] === '-a' || ls[0] === '--all') {
-                document.querySelector('.results').innerHTML = '' + '<h3 class="label">Current page:</h3>';
-                for (var i = 0; i < val.length; i++) {
-                    var a = document.createElement('a');
-                    a.href = '#' + val[i].id;
-                    if (!val[i].querySelectorAll('h1, h2, h3, h4, h5, h6').length) {
-                        a.innerHTML = val[i].id.replace('-', ' ');
-                    } else {
-                        a.innerHTML = val[i].querySelectorAll('h1, h2, h3, h4, h5, h6')[0].innerText;
+                    break;
+                case '-a':
+                case '--all':
+                    document.querySelector('.results').innerHTML = '' + '<h3 class="label">Current page:</h3>';
+                    for (var i = 0; i < val.length; i++) {
+                        var a = document.createElement('a');
+                        a.href = '#' + val[i].id;
+                        if (!val[i].querySelectorAll('h1, h2, h3, h4, h5, h6').length) {
+                            a.innerHTML = val[i].id.replace('-', ' ');
+                        } else {
+                            a.innerHTML = val[i].querySelectorAll('h1, h2, h3, h4, h5, h6')[0].innerText;
+                        }
+                        document.querySelector('.results').appendChild(a);
                     }
-                    document.querySelector('.results').appendChild(a);
-                }
-                document.querySelector('.results').innerHTML += '<h3 class="label">Entire website:</h3>';
-                for (var i = 0, j = links.length; i < j; i++) {
-                    var a = document.createElement('a');
-                    a.href = (window.location.protocol + '//' + window.location.hostname + links[i].url);
-                    if (links[i].url === '/' || links[i].url === '/home' || links[i].url === window.location.hostname) {
-                        a.innerHTML = "Homepage";
-                    } else {
-                        a.innerHTML = links[i].title;
+                    document.querySelector('.results').innerHTML += '<h3 class="label">Entire website:</h3>';
+                    for (var i = 0, j = links.length; i < j; i++) {
+                        var a = document.createElement('a');
+                        a.href = (window.location.protocol + '//' + window.location.hostname + links[i].url);
+                        if (links[i].url === '/' || links[i].url === '/home' || links[i].url === window.location.hostname) {
+                            a.innerHTML = "Homepage";
+                        } else {
+                            a.innerHTML = links[i].title;
+                        }
+                        document.querySelector('.results').appendChild(a);
                     }
-                    document.querySelector('.results').appendChild(a);
-                }   
-            } else if (ls[0] === '-h' || ls[0] === '--help') {
-                document.querySelector('.results').innerHTML = '' + 'list all available locations to navigate to<br />Usage:<br />ls [option] [target]<br />Options:<br />[] // prints available locations on current page<br />[-e] or [--external] // prints available pages on the website<br />[-h], [--help] // prints help manual';
-            } else {
-                document.querySelector('.results').innerHTML = '' + 'ls ' + ls.join(' ') + ': command not found';
+                    break;
+                case '-h':
+                case '--help':
+                    document.querySelector('.results').innerHTML = '' + 'list all available locations to navigate to<br />Usage:<br />ls [option] [target]<br />Options:<br />[] // prints available locations on current page<br />[-e] or [--external] // prints available pages on the website<br />[-h], [--help] // prints help manual';
+                    break;
+                default: 
+                    document.querySelector('.results').innerHTML = '' + 'ls ' + ls.join(' ') + ': command not found';
             }
         }
     },
